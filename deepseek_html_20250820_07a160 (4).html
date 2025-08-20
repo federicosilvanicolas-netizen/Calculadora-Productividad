@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Productividad</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .description {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #7f8c8d;
+        }
+        
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .calculator-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        h2 {
+            color: #3498db;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f4fc;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .result h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 10px 0;
+        }
+        
+        .daily-goal {
+            background-color: #eaf7ee;
+            border-left: 4px solid #27ae60;
+            margin-top: 15px;
+        }
+        
+        .negative {
+            color: #e74c3c;
+        }
+        
+        .info-box {
+            background-color: #fff4e6;
+            border-left: 4px solid #f39c12;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+        
+        .highlight {
+            background-color: #ffffcc;
+            padding: 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .summary-box {
+            background-color: #e8f6f3;
+            border-left: 4px solid #1abc9c;
+            padding: 15px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Productividad</h1>
+        <p class="description">Calcula cuántos casos deben cerrar tus empleados para alcanzar el 75.60% de efectividad mensual</p>
+        
+        <div class="calculator-grid">
+            <div class="calculator-section">
+                <h2>Calculadora de Efectividad Actual</h2>
+                <div class="input-group">
+                    <label for="cerrados">Casos cerrados:</label>
+                    <input type="number" id="cerrados" min="0" placeholder="Ingrese cantidad">
+                </div>
+                <div class="input-group">
+                    <label for="gestionados">Casos gestionados:</label>
+                    <input type="number" id="gestionados" min="0" placeholder="Ingrese cantidad">
+                </div>
+                <button id="calcular-btn">Calcular Efectividad</button>
+                
+                <div class="result">
+                    <h3>Resultado:</h3>
+                    <p>Efectividad actual: <span id="efectividad-actual" class="result-value">0%</span></p>
+                    <p id="mensaje-meta"></p>
+                </div>
+            </div>
+            
+            <div class="calculator-section">
+                <h2>Proyección para Alcanzar 75.60%</h2>
+                <div class="input-group">
+                    <label for="fecha-actual">Fecha actual:</label>
+                    <input type="date" id="fecha-actual">
+                </div>
+                <div class="input-group">
+                    <label for="dias-franco-restantes">Días de franco restantes:</label>
+                    <input type="number" id="dias-franco-restantes" min="0" max="31" value="0">
+                </div>
+                <div class="input-group">
+                    <label for="meta-diaria">Meta diaria de casos gestionados:</label>
+                    <input type="number" id="meta-diaria" min="1" value="16">
+                </div>
+                <button id="proyectar-btn">Calcular Proyección</button>
+                
+                <div class="result">
+                    <h3>Proyección Diaria:</h3>
+                    <p>Días restantes en el mes: <span id="dias-totales-restantes" class="result-value">0</span></p>
+                    <p>Días hábiles restantes: <span id="dias-restantes" class="result-value">0</span></p>
+                    <p>Casos a cerrar por día: <span id="cierre-por-dia" class="result-value">0</span></p>
+                    <p>Casos no concretados permitidos por día: <span id="no-concretados-permitidos" class="result-value">0</span></p>
+                </div>
+                
+                <div class="summary-box">
+                    <h3>Resumen:</h3>
+                    <p>Para mantener una efectividad del 75.60%, con una meta de <span class="highlight" id="resumen-meta-diaria">16</span> casos gestionados por día, el empleado debe cerrar aproximadamente <span class="highlight" id="resumen-cierre">12</span> casos diarios, permitiéndose hasta <span class="highlight" id="resumen-no-concretados">4</span> no concretados por día.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Establecer fecha actual por defecto
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = (today.getMonth() + 1).toString().padStart(2, '0');
+            const day = today.getDate().toString().padStart(2, '0');
+            document.getElementById('fecha-actual').value = `${year}-${month}-${day}`;
+            
+            // Calcular efectividad actual
+            document.getElementById('calcular-btn').addEventListener('click', function() {
+                const cerrados = parseInt(document.getElementById('cerrados').value) || 0;
+                const gestionados = parseInt(document.getElementById('gestionados').value) || 0;
+                
+                if (gestionados === 0) {
+                    document.getElementById('efectividad-actual').textContent = "0%";
+                    document.getElementById('mensaje-meta').textContent = "Ingrese valores válidos para calcular.";
+                    return;
+                }
+                
+                const efectividad = (cerrados / gestionados) * 100;
+                document.getElementById('efectividad-actual').textContent = efectividad.toFixed(2) + "%";
+                
+                if (efectividad >= 75.60) {
+                    document.getElementById('mensaje-meta').innerHTML = "<span style='color:#27ae60;'>¡Meta alcanzada! Buen trabajo.</span>";
+                } else {
+                    const casosNecesarios = Math.ceil((gestionados * 0.756 - cerrados) / (1 - 0.756));
+                    document.getElementById('mensaje-meta').innerHTML = `Necesita cerrar <strong>${Math.max(0, casosNecesarios)}</strong> casos más de los gestionados para alcanzar el 75.60%.`;
+                }
+            });
+            
+            // Calcular proyección
+            document.getElementById('proyectar-btn').addEventListener('click', function() {
+                const cerrados = parseInt(document.getElementById('cerrados').value) || 0;
+                const gestionados = parseInt(document.getElementById('gestionados').value) || 0;
+                const fechaActual = new Date(document.getElementById('fecha-actual').value);
+                const diasFrancoRestantes = parseInt(document.getElementById('dias-franco-restantes').value) || 0;
+                const metaDiaria = parseInt(document.getElementById('meta-diaria').value) || 16;
+                
+                // Calcular días totales restantes en el mes (desde el día siguiente)
+                const ultimoDiaMes = new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 1, 0);
+                const diaActual = fechaActual.getDate();
+                const diasTotalesRestantes = ultimoDiaMes.getDate() - diaActual;
+                
+                // Calcular días hábiles restantes (todos los días menos los francos)
+                const diasHabilesRestantes = Math.max(0, diasTotalesRestantes - diasFrancoRestantes);
+                
+                // Calcular total de casos que se gestionarán (basado en la meta diaria)
+                const totalAGestionar = gestionados + (diasHabilesRestantes * metaDiaria);
+                
+                // Calcular casos necesarios para alcanzar 75.60%
+                const casosNecesariosTotal = Math.ceil(totalAGestionar * 0.756);
+                const casosFaltantes = Math.max(0, casosNecesariosTotal - cerrados);
+                
+                // Calcular proyección diaria
+                let cierrePorDia = 0;
+                let noConcretadosPermitidos = 0;
+                
+                if (diasHabilesRestantes > 0) {
+                    cierrePorDia = Math.ceil(casosFaltantes / diasHabilesRestantes);
+                    noConcretadosPermitidos = metaDiaria - cierrePorDia;
+                }
+                
+                // Mostrar resultados
+                document.getElementById('dias-totales-restantes').textContent = diasTotalesRestantes;
+                document.getElementById('dias-restantes').textContent = diasHabilesRestantes;
+                document.getElementById('cierre-por-dia').textContent = cierrePorDia;
+                document.getElementById('no-concretados-permitidos').textContent = noConcretadosPermitidos;
+                
+                // Actualizar resumen
+                document.getElementById('resumen-meta-diaria').textContent = metaDiaria;
+                document.getElementById('resumen-cierre').textContent = cierrePorDia;
+                document.getElementById('resumen-no-concretados').textContent = noConcretadosPermitidos;
+            });
+        });
+    </script>
+</body>
+</html>
